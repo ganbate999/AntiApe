@@ -456,11 +456,11 @@ function App(props) {
     
   }, [objTokenCount]);
   
-  const param = [address]
-  const userHaveToken = useContractReader(readContracts, "AntiApe", "userHaveTokens", param);
-  useEffect(() => {
-    console.log(userHaveToken)
-  }, [userHaveToken])
+  // const param = [address]
+  // const userHaveToken = useContractReader(readContracts, "AntiApe", "userHaveTokens", param);
+  // useEffect(() => {
+  //   console.log(userHaveToken)
+  // }, [userHaveToken])
   //k-k
   const onlineStatus = useOnlineStatus()
 
@@ -472,6 +472,15 @@ function App(props) {
           <Switch>
             <Route exact path='/'>
               <Home 
+                address={address}
+                localProvider={localProvider}
+                userSigner={userSigner}
+                mainnetProvider={mainnetProvider}
+                price={price}
+                web3Modal={web3Modal}
+                loadWeb3Modal={loadWeb3Modal}
+                logoutOfWeb3Modal={logoutOfWeb3Modal}
+                blockExplorer={blockExplorer}
                 contract={readContracts["AntiApe"]}
                 signer={userSigner}
                 remainTokenCount={remainTokenCount} />

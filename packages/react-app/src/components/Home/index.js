@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { parseEther } from "@ethersproject/units";
 import { ETH_VAL } from "../../constants";
+import { Account } from "../../components";
 
 import {
   Container,
@@ -13,9 +14,22 @@ import {
   PointWrapper,
 } from "./styles"; //k-k
 
-export const Home = ({ contract, signer, remainTokenCount }) => {
+export const Home = ({
+  address,
+  userSigner,
+  localProvider,
+  mainnetProvider,
+  price,
+  minimized,
+  web3Modal,
+  loadWeb3Modal,
+  logoutOfWeb3Modal,
+  blockExplorer,
+  contract,
+  signer,
+  remainTokenCount,
+}) => {
   const [amount, setAmount] = useState(ETH_VAL);
-  const [count, setCount] = useState(3);
   const [minting, setMinting] = useState(false);
   const [cnt, setCnt] = useState(1);
   const [currentAccount, setCurrentAccount] = useState(null);
@@ -23,9 +37,11 @@ export const Home = ({ contract, signer, remainTokenCount }) => {
   const mintNftHandler = async () => {
     setMinting(true);
     try {
+      console.log(address);
       const mintFunction = contract.connect(signer)["mint"];
-      const hash = await mintFunction(count, {
-        value: parseEther((amount * count).toString()),
+
+      const hash = await mintFunction(address, cnt, {
+        value: parseEther((amount * cnt).toString()),
       });
       await hash.wait();
       setMinting(false);
@@ -86,7 +102,20 @@ export const Home = ({ contract, signer, remainTokenCount }) => {
             </ProgressBarContainer>
           </NFTContainer>
           <ButtonWrapper>
-            {currentAccount ? mintNftButton() : connectWalletButton()}
+            <Account
+              address={address}
+              localProvider={localProvider}
+              userSigner={userSigner}
+              mainnetProvider={mainnetProvider}
+              price={price}
+              web3Modal={web3Modal}
+              loadWeb3Modal={loadWeb3Modal}
+              logoutOfWeb3Modal={logoutOfWeb3Modal}
+              blockExplorer={blockExplorer}
+              contract={contract}
+              signer={userSigner}
+              remainTokenCount={remainTokenCount}
+            />
           </ButtonWrapper>
         </TextWrapper>
         <ImgWrapper>

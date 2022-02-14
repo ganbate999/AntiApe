@@ -8,7 +8,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await deploy("AntiApe", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    //args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    args: [
+      "AntiApe",
+      "AntiApe_Symbol",
+      "https://gateway.pinata.cloud/ipfs/QmUP53iKtm7mszpaCcV2kba7YJvUxvo4GSyUWV619Mtjfq/",
+    ],
     log: true,
   });
 
